@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | Contáctenos{% endblock %}
+
+{# Estilos y elementos visuales de la pantalla de contacto. #}
+{% block extra_head %}
+    <style>
+        body { 
+            background: url("{{ url_for('static', filename='IMG/QUARESMA.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+
+        .page-center {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .contact-card {
+            background: rgba(30, 30, 30, 0.92);
+            padding: 40px;
+            border-radius: 20px;
+            border-left: 5px solid #00ff88;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.45);
+            width: 100%;
+            max-width: 1100px;
+            text-align: left;
+        }
+
+        .contact-card-grid {
+            display: grid;
+            gap: 28px;
+        }
+
+        @media (min-width: 992px) {
+            .contact-card-grid {
+                grid-template-columns: 380px 1fr;
+                align-items: start;
+            }
+        }
+
+        .contact-panel {
+            display: grid;
+            gap: 18px;
+        }
+
+        .contact-panel h2 {
+            font-size: 1.25rem;
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+
+        .contact-item {
+            padding: 20px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(0,255,136,0.14);
+        }
+
+        .contact-item h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #e5e5e5;
+        }
+
+        .contact-item p {
+            margin: 0;
+            color: #d8d8d8;
+            line-height: 1.6;
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .contact-form .form-control,
+        .contact-form textarea {
+            background: rgba(10, 10, 10, 0.96);
+            border: 1px solid #2e2e2e;
+            color: #fff;
+        }
+
+        .contact-form textarea {
+            min-height: 160px;
+            resize: vertical;
+        }
+
+        .btn-primary {
+            background-color: #00ff88;
+            border: none;
+            color: #000;
+            font-weight: 700;
+            padding: 14px 24px;
+        }
+
+        .btn-primary:hover {
+            background-color: #00e676;
+            color: #000;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 24px;
+            color: #bbb;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+        .btn-back:hover { color: #00ff88; }
+
+        .form-text {
+            color: #c4c4c4;
+            font-size: 0.9rem;
+        }
+    </style>
+{% endblock %}
+
+{# Información de contacto y formulario para enviar un mensaje. #}
+{% block content %}
+<main class="page-center">
+<div class="contact-card">
+    <h1>Contáctenos</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="contact-card-grid">
+        <div class="contact-panel">
+            <div class="contact-item">
+                <h2>Información de contacto</h2>
+                <p>Estamos listos para ayudarte con cualquier consulta deportiva, sugerencia o comentario.</p>
+            </div>
+            <div class="contact-item">
+                <h3>WhatsApp</h3>
+                <p>3025744919</p>
+            </div>
+            <div class="contact-item">
+                <h3>Correo Electrónico</h3>
+                <p>MyDeport@gmail.com</p>
+            </div>
+            <div class="contact-item">
+                <h3>Dirección</h3>
+                <p>MyDeport Team · Línea de atención 24/7</p>
+            </div>
+        </div>
+
+        <form class="contact-form" method="POST" action="{{ url_for('contact') }}">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre completo</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ nombre or '' }}" placeholder="Tu nombre" required>
+            </div>
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="correo" name="correo" value="{{ correo or '' }}" placeholder="tu@mail.com" required>
+            </div>
+            <div class="mb-3">
+                <label for="asunto" class="form-label">Asunto</label>
+                <input type="text" class="form-control" id="asunto" name="asunto" value="{{ asunto or '' }}" placeholder="¿Sobre qué deseas escribir?" required>
+            </div>
+            <div class="mb-3">
+                <label for="mensaje" class="form-label">Mensaje</label>
+                <textarea class="form-control" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required>{{ mensaje or '' }}</textarea>
+                <div class="form-text">Agrega todos los detalles para que podamos ayudarte mejor.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+        </form>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="btn-back">← Volver a MyDeport</a>
+</div>
+</main>
+{% endblock %}

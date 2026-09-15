@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | Buscar Jugadores{% endblock %}
+
+{# Estilos del buscador especializado de jugadores. #}
+{% block extra_head %}
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='IMG/07.png') }}");
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+        .page-content { padding: 40px 20px; }
+        .search-container { background: rgba(30,30,30,0.9); border: 2px solid #00ff88; border-radius: 12px; padding: 30px; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .search-input { background: rgba(20,20,20,0.9); border: 1px solid #00ff88; color: #fff; padding: 12px; border-radius: 8px; }
+        .search-btn { background: linear-gradient(135deg, #00ff88, #00cc6f); border: none; color: #000; font-weight: bold; padding: 12px 30px; border-radius: 8px; transition: transform 0.2s; }
+        .search-btn:hover { transform: scale(1.05); background: linear-gradient(135deg, #00cc6f, #00ff88); color: #000; }
+        .player-card { background: rgba(30,30,30,0.9); border: 2px solid #00ff88; border-radius: 12px; padding: 20px; margin-bottom: 20px; transition: transform 0.3s; }
+        .player-card:hover { transform: translateY(-5px); border-color: #00ff88; box-shadow: 0 0 20px rgba(0,255,136,0.3); }
+        .player-name { color: #00ff88; font-weight: bold; font-size: 1.3em; margin-bottom: 10px; }
+        .player-info { font-size: 0.95em; margin: 5px 0; }
+        .info-label { color: #00ff88; font-weight: 600; }
+        .container { max-width: 1000px; }
+        h1 { color: #00ff88; text-align: center; margin-bottom: 40px; text-shadow: 0 0 10px rgba(0,255,136,0.5); }
+        .popular-searches { background: rgba(30,30,30,0.9); border: 1px solid #00ff88; border-radius: 8px; padding: 15px; margin-top: 20px; text-align: center; }
+        .popular-searches h6 { color: #00ff88; margin-bottom: 10px; }
+        .search-tag { display: inline-block; background: rgba(0,255,136,0.2); border: 1px solid #00ff88; color: #00ff88; padding: 5px 12px; border-radius: 20px; margin: 5px; cursor: pointer; font-size: 0.9em; transition: all 0.2s; }
+        .search-tag:hover { background: rgba(0,255,136,0.4); text-decoration: none; color: #00ff88; }
+    </style>
+{% endblock %}
+
+{# Formulario de búsqueda y resultados de jugadores encontrados. #}
+{% block content %}
+<main class="page-content">
+<div class="container">
+    <h1>🔍 Buscar Jugadores</h1>
+    <div class="search-container">
+        <form method="POST" action="{{ url_for('search_players') }}">
+            <div class="input-group mb-3">
+                <input type="text" name="search_query" class="form-control search-input" placeholder="Busca un jugador por nombre..." value="{{ search_query }}" required>
+                <button class="btn search-btn" type="submit">Buscar</button>
+            </div>
+        </form>
+        <div class="popular-searches">
+            <h6>Jugadores populares:</h6>
+            <form method="POST" action="{{ url_for('search_players') }}" style="display: inline;"><input type="hidden" name="search_query" value="Cristiano Ronaldo"><button type="submit" class="search-tag">Cristiano Ronaldo</button></form>
+            <form method="POST" action="{{ url_for('search_players') }}" style="display: inline;"><input type="hidden" name="search_query" value="Kylian Mbappé"><button type="submit" class="search-tag">Kylian Mbappé</button></form>
+            <form method="POST" action="{{ url_for('search_players') }}" style="display: inline;"><input type="hidden" name="search_query" value="Voz Inha"><button type="submit" class="search-tag">Voz Inha</button></form>
+        </div>
+    </div>
+    {% if search_query %}
+        {% if players %}
+            <h3 style="color: #00ff88; margin: 30px 0 20px 0;">Resultados para: "{{ search_query }}"</h3>
+            {% for player in players %}
+            <div class="player-card">
+                <div class="player-name">{{ player.nombre }}</div>
+                <div class="player-info"><span class="info-label">Nacionalidad:</span> {{ player.nacionalidad }}</div>
+                <div class="player-info"><span class="info-label">Posición:</span> {{ player.posicion }}</div>
+                <div class="player-info"><span class="info-label">Club:</span> {{ player.club }}</div>
+                <div class="player-info"><span class="info-label">Número de camiseta:</span> {{ player.numero_camiseta }}</div>
+                <div class="player-info"><span class="info-label">Altura:</span> {{ player.altura }}</div>
+                <div class="player-info"><span class="info-label">Peso:</span> {{ player.peso }}</div>
+                <div class="player-info" style="margin-top: 15px; color: #ddd;">{{ player.descripcion }}</div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center" style="margin-top: 30px;">💡 Usa la barra de búsqueda arriba para buscar jugadores, o haz clic en uno de los nombres populares.</div>
+    {% endif %}
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('profile') }}" class="btn btn-outline-light">← Volver al perfil</a>
+        <a href="{{ url_for('players') }}" class="btn btn-outline-success">👥 Ver todos los jugadores</a>
+    </div>
+</div>
+</main>
+{% endblock %}

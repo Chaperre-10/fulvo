@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | Resultados de Búsqueda{% endblock %}
+
+{# Estilos de los resultados del buscador global. #}
+{% block extra_head %}
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='IMG/euro2024.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+        .page-content { padding: 40px 20px; }
+        .container { max-width: 1000px; }
+        h1 { color: #00ff88; text-align: center; margin-bottom: 10px; text-shadow: 0 0 10px rgba(0,255,136,0.5); }
+        .search-term { text-align: center; color: #aaa; margin-bottom: 40px; font-size: 1.1em; }
+        .result-category { color: #00ff88; font-weight: bold; font-size: 1.2em; margin-top: 30px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #00ff88; }
+        .result-card {
+            background: rgba(30,30,30,0.9);
+            border: 2px solid #00ff88;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .result-card:hover { transform: translateY(-4px); box-shadow: 0 0 20px rgba(0,255,136,0.2); }
+        .result-media {
+            width: 180px;
+            min-width: 180px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(0,255,136,0.7);
+            background: rgba(255,255,255,0.04);
+            box-shadow: 0 0 16px rgba(0,255,136,0.18);
+        }
+        .result-media img {
+            display: block;
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .result-body {
+            flex: 1;
+            min-width: 0;
+        }
+        .result-title { color: #00ff88; font-weight: bold; font-size: 1.3em; margin-bottom: 10px; }
+        .result-info { font-size: 0.95em; margin: 5px 0; color: #ddd; }
+        .info-label { color: #00ff88; font-weight: 600; }
+        .player-badge { display: inline-block; background: rgba(0,100,255,0.3); border: 1px solid #0064ff; color: #00a8ff; padding: 3px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 10px; }
+        .club-badge { display: inline-block; background: rgba(255,165,0,0.3); border: 1px solid #ffa500; color: #ffb84d; padding: 3px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 10px; }
+        .tournament-badge { display: inline-block; background: rgba(255,215,0,0.3); border: 1px solid #ffd700; color: #ffeb3b; padding: 3px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 10px; }
+        .no-results { background: rgba(30,30,30,0.9); border: 1px solid #ff6b6b; border-radius: 12px; padding: 30px; text-align: center; margin-top: 30px; }
+        @media (max-width: 768px) {
+            .result-card { flex-direction: column; }
+            .result-media { width: 100%; min-width: 0; }
+            .result-media img { height: 220px; }
+        }
+    </style>
+{% endblock %}
+
+{# Resultados agrupados por tipo de entidad encontrada. #}
+{% block content %}
+<main class="page-content">
+<div class="container">
+    <h1>🔍 Resultados de Búsqueda</h1>
+    <div class="search-term">Búsqueda: <strong>"{{ query }}"</strong></div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% set players = results | selectattr('type', 'equalto', 'player') | list %}
+    {% set clubs_list = results | selectattr('type', 'equalto', 'club') | list %}
+    {% set tournaments_list = results | selectattr('type', 'equalto', 'tournament') | list %}
+
+    {% if results %}
+        {% if players %}
+            <div class="result-category">👥 Jugadores ({{ players | length }})</div>
+            {% for player in players %}
+            <div class="result-card">
+                {% if player.image %}
+                <div class="result-media">
+                    <img src="{{ url_for('static', filename=player.image) }}" alt="{{ player.nombre }}" loading="lazy">
+                </div>
+                {% endif %}
+                <div class="result-body">
+                    <div>
+                        <span class="player-badge">JUGADOR</span>
+                        <span class="result-title">{{ player.nombre or 'Sin nombre registrado' }}</span>
+                    </div>
+                    <div class="result-info"><span class="info-label">Nacionalidad:</span> {{ player.nacionalidad or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Posición:</span> {{ player.posicion or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Club:</span> {{ player.club or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Camiseta:</span> {{ player.numero_camiseta if player.numero_camiseta is not none else 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Altura:</span> {{ player.altura or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Peso:</span> {{ player.peso or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Fecha de nacimiento:</span> {{ player.fecha_nacimiento or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Descripción:</span> {{ player.descripcion or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Goles:</span> {{ player.goles if player.goles is not none else 0 }}</div>
+                    <div class="result-info"><span class="info-label">Asistencias:</span> {{ player.asistencias if player.asistencias is not none else 0 }}</div>
+                    <div class="result-info"><span class="info-label">Partidos jugados:</span> {{ player.partidos_jugados if player.partidos_jugados is not none else 0 }}</div>
+                    <div class="result-info"><span class="info-label">Tarjetas amarillas:</span> {{ player.tarjetas_amarillas if player.tarjetas_amarillas is not none else 0 }}</div>
+                    <div class="result-info"><span class="info-label">Tarjetas rojas:</span> {{ player.tarjetas_rojas if player.tarjetas_rojas is not none else 0 }}</div>
+                    <div class="result-info"><span class="info-label">Velocidad:</span> {{ player.velocidad if player.velocidad is not none else 0 }}</div>
+                    <div class="result-info"><span class="info-label">Resistencia:</span> {{ player.resistencia if player.resistencia is not none else 0 }}</div>
+                    <div class="result-info"><span class="info-label">Defensa:</span> {{ player.defensa if player.defensa is not none else 0 }}</div>
+                    <div class="result-info"><span class="info-label">Logros:</span> {{ player.logros or 'No disponible' }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if clubs_list %}
+            <div class="result-category">🏟️ Clubes ({{ clubs_list | length }})</div>
+            {% for club in clubs_list %}
+            <div class="result-card">
+                {% if club.image %}
+                <div class="result-media">
+                    <img src="{{ url_for('static', filename=club.image) }}" alt="{{ club.nombre }}" loading="lazy">
+                </div>
+                {% endif %}
+                <div class="result-body">
+                    <div>
+                        <span class="club-badge">CLUB</span>
+                        <span class="result-title">{{ club.nombre or 'Sin nombre registrado' }}</span>
+                    </div>
+                    <div class="result-info"><span class="info-label">País:</span> {{ club.pais or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Ciudad:</span> {{ club.ciudad or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Estadio:</span> {{ club.estadio or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Año de fundación:</span> {{ club.ano_fundacion if club.ano_fundacion is not none else 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Descripción:</span> {{ club.descripcion or 'No disponible' }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if tournaments_list %}
+            <div class="result-category">🏆 Torneos ({{ tournaments_list | length }})</div>
+            {% for tournament in tournaments_list %}
+            <div class="result-card">
+                {% if tournament.image %}
+                <div class="result-media">
+                    <img src="{{ url_for('static', filename=tournament.image) }}" alt="{{ tournament.nombre }}" loading="lazy">
+                </div>
+                {% endif %}
+                <div class="result-body">
+                    <div>
+                        <span class="tournament-badge">TORNEO</span>
+                        <span class="result-title">{{ tournament.nombre or 'Sin nombre registrado' }}</span>
+                    </div>
+                    <div class="result-info"><span class="info-label">Tipo:</span> {{ tournament.tipo or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Año:</span> {{ tournament.ano if tournament.ano is not none else 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">País sede:</span> {{ tournament.pais_sede or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Ganador:</span> {{ tournament.ganador or 'No disponible' }}</div>
+                    <div class="result-info"><span class="info-label">Descripción:</span> {{ tournament.descripcion or 'No disponible' }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        <div class="no-results">
+            <h4 style="color: #ff6b6b; margin-bottom: 15px;">❌ Sin resultados</h4>
+            <p>No se encontraron jugadores, clubes o torneos que coincidan con "<strong>{{ query }}</strong>"</p>
+            <p style="color: #888; font-size: 0.9em; margin-top: 15px;">Intenta con otro término de búsqueda</p>
+        </div>
+    {% endif %}
+
+    <div style="margin-top: 40px;">
+        <a href="{{ url_for('profile') }}" class="btn btn-outline-light">← Volver al perfil</a>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-success">🏠 Ir al inicio</a>
+    </div>
+</div>
+</main>
+{% endblock %}

@@ -1,0 +1,206 @@
+
+{% extends "base.html" %}
+
+{% block title %}Registro Exitoso | MyDeport{% endblock %}
+
+{# Estilos de la pantalla de confirmación de operaciones exitosas. #}
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+
+    /* CAMBIA AQUÍ TU IMAGEN */
+    background:
+    linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.65)),
+    url("IMG/Messi\ y\ la\ copa\ del\ mundo.jfif");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    min-height:100vh;
+    overflow:hidden;
+}
+
+.page-center {
+    min-height: calc(100vh - 80px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding: 20px 0;
+}
+
+/* Luces del estadio */
+body::before{
+    content:"";
+    position:absolute;
+    top:-150px;
+    left:50%;
+    transform:translateX(-50%);
+    width:900px;
+    height:400px;
+    background:radial-gradient(
+        circle,
+        rgba(255,255,255,.25),
+        transparent 70%
+    );
+}
+
+.container{
+    width:90%;
+    max-width:550px;
+
+    padding:45px;
+
+    text-align:center;
+
+    background:#1e1e1ee6;
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    border-radius:30px;
+
+    box-shadow:
+    0 0 25px rgba(0,255,100,.2),
+    0 20px 50px rgba(0,0,0,.5);
+
+    animation:entrada .9s ease;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:800;
+    color:#00ff88;
+    margin-bottom:25px;
+    letter-spacing:1px;
+}
+
+.icono{
+    width:120px;
+    height:120px;
+    margin:auto;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:60px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        #00ff88,
+        #00ff88
+    );
+
+    box-shadow:
+    0 0 20px #00ff88,
+    0 0 40px rgba(0,255,106,.5);
+
+    margin-bottom:25px;
+}
+
+h1{
+    color:white;
+    font-size:2rem;
+    margin-bottom:15px;
+}
+
+p{
+    color:#e5e5e5;
+    line-height:1.7;
+    margin-bottom:30px;
+}
+
+.btn{
+    display:inline-block;
+
+    padding:15px 35px;
+
+    text-decoration:none;
+
+    background:linear-gradient(
+        135deg,
+        #00ff88,
+        #00b248
+    );
+
+    color:white;
+
+    font-weight:700;
+
+    border-radius:50px;
+
+    transition:.4s;
+}
+
+.btn:hover{
+    transform:translateY(-4px) scale(1.05);
+
+    box-shadow:
+    0 0 20px #00ff88,
+    0 0 40px rgba(0,255,106,.6);
+}
+
+.linea{
+    width:80px;
+    height:4px;
+    background:#00ff88;
+    margin:20px auto;
+    border-radius:10px;
+}
+
+@keyframes entrada{
+
+    from{
+        opacity:0;
+        transform:translateY(50px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+</style>
+{% endblock %}
+
+{# Mensaje de éxito y enlaces para volver a la aplicación. #}
+{% block content %}
+<main class="page-center">
+<div class="container">
+
+    <div class="logo">⚽ MYDEPORT</div>
+
+    <div class="icono">
+        🏆
+    </div>
+
+    <h1>¡Registro Exitoso!</h1>
+
+    <div class="linea"></div>
+
+    <p>
+        Tu información ha sido registrada correctamente.
+        Gracias por formar parte de la comunidad deportiva
+        más apasionada por el fútbol.
+    </p>
+
+    <a href="{{ url_for('users') }}" class="btn">
+        Ver Usuarios
+    </a>
+
+</div>
+</main>
+{% endblock %}

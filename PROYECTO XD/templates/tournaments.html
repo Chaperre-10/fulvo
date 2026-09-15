@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | Torneos{% endblock %}
+
+{# Estilos del catálogo de torneos y sus datos principales. #}
+{% block extra_head %}
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='IMG/euro2024.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+        .page-content { padding: 40px 20px; }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        h1 { color: #ffd700; text-align: center; margin-bottom: 50px; text-shadow: 0 0 20px rgba(255, 215, 0, 0.6); font-weight: 700; font-size: 3em; animation: slideInUp 0.6s ease-out; }
+        .tournament-card { background: linear-gradient(135deg, rgba(30,30,30,0.95), rgba(20,20,20,0.95)); border: 2px solid #ffd700; border-radius: 16px; padding: 25px; margin-bottom: 25px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); animation: slideInUp 0.6s ease-out; animation-fill-mode: both; position: relative; overflow: hidden; }
+        .tournament-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent); transition: left 0.5s; }
+        .tournament-card:hover::before { left: 100%; }
+        .tournament-card:nth-child(1) { animation-delay: 0.1s; }
+        .tournament-card:nth-child(2) { animation-delay: 0.2s; }
+        .tournament-card:nth-child(3) { animation-delay: 0.3s; }
+        .tournament-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 50px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.2); }
+        .tournament-name { color: #ffd700; font-weight: bold; font-size: 1.8em; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        .tournament-info { font-size: 1em; margin: 8px 0; }
+        .info-label { color: #ffd700; font-weight: 700; text-transform: uppercase; font-size: 0.85em; }
+        .winner-badge { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block; margin-top: 10px; animation: pulse 2s infinite; }
+        .container { max-width: 1100px; }
+    </style>
+{% endblock %}
+
+{# Lista de torneos disponibles en el sistema. #}
+{% block content %}
+<main class="page-content">
+<div class="container">
+    <h1>🏆 Torneos</h1>
+    {% if tournaments %}
+        {% for tournament in tournaments %}
+        <div class="tournament-card">
+            <div class="tournament-name">{{ tournament.nombre }}</div>
+            <div class="tournament-info"><span class="info-label">Tipo:</span> {{ tournament.tipo }}</div>
+            <div class="tournament-info"><span class="info-label">País sede:</span> {{ tournament.pais_sede }}</div>
+            <div class="tournament-info"><span class="info-label">Año:</span> {{ tournament.ano }}</div>
+            <div class="tournament-info"><span class="info-label">Ganador:</span> <span class="winner-badge">{{ tournament.ganador }}</span></div>
+            <div class="tournament-info" style="margin-top: 15px; color: #ddd;">{{ tournament.descripcion }}</div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info text-center">No hay torneos registrados.</div>
+    {% endif %}
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('profile') }}" class="btn btn-outline-light">← Volver al perfil</a>
+        <a href="{{ url_for('clubs') }}" class="btn btn-outline-success">🏟️ Ver clubes</a>
+    </div>
+</div>
+</main>
+{% endblock %}

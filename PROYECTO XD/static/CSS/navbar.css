@@ -1,0 +1,401 @@
+/* Estructura, animaciones e interacciones de la barra de navegación. */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #121212;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.content-wrapper {
+  flex: 1;
+}
+.site-footer {
+  background: rgba(10, 10, 10, 0.98);
+  color: #ffffff;
+  border-top: 1px solid rgba(0, 255, 136, 0.2);
+  padding: 12px 0;
+}
+.site-footer .footer-content {
+  align-items: center;
+}
+.site-footer .footer-text {
+  color: #ffffff;
+  font-weight: 600;
+}
+.site-footer .footer-social,
+.site-footer .footer-sponsor {
+  justify-content: center;
+}
+.site-footer .sponsor-link {
+  color: #ffffff;
+}
+.site-footer .sponsor-text {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.site-footer .social-icon,
+.site-footer .sponsor-logo {
+  max-width: 40px;
+  max-height: 40px;
+}
+
+body, a, button, input, select, textarea, .nav-link, .navbar-brand, .dropdown-item {
+  cursor: url("../IMG/trionda_cursor_circle.png") 14 14, auto;
+}
+
+@keyframes footballBounce {
+  0% { transform: translateY(0) scale(0.9); }
+  30% { transform: translateY(-6px) scale(1.05); }
+  60% { transform: translateY(2px) scale(0.98); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.navbar{
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  padding: 0.8rem 0;
+  background: rgba(31, 31, 31, 0.96);
+  border-bottom: 2px solid #00ff88;
+  backdrop-filter: blur(12px);
+  transition: background-color 0.28s ease, box-shadow 0.28s ease, transform 0.18s ease;
+  will-change: transform, box-shadow;
+}
+.navbar-nav .nav-link {
+  padding: 0.55rem 0.8rem;
+}
+.navbar-search-container form.d-flex {
+  gap: 0.65rem;
+}
+.navbar-search-container .form-control {
+  min-height: 42px;
+}
+.navbar-search-container .btn {
+  padding: 0.55rem 1rem;
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link,
+.navbar-toggler-icon,
+.navbar-toggler {
+  color: #ffffff !important;
+}
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.navbar-collapse {
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.navbar-nav {
+  margin-bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.navbar-nav .nav-item {
+  display: flex;
+}
+.navbar-toggler {
+  border-color: rgba(255,255,255,0.35);
+}
+.navbar-toggler-icon {
+  filter: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%2300ff88' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+.navbar .navbar-brand{
+  transition: transform 0.28s ease, color 0.28s ease, text-shadow 0.28s ease;
+  display: inline-block;
+  color: #00ff88 !important;
+}
+.navbar .navbar-brand:hover{
+  transform: translateY(-3px) scale(1.02);
+  color: #00ff88 !important;
+  text-shadow: 0 0 12px rgba(0,255,136,0.12);
+}
+
+.btn-outline-success {
+  color: #00ff88 !important;
+  border-color: #00ff88 !important;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.btn-outline-success:hover {
+  background-color: #00ff88 !important;
+  color: #000 !important;
+}
+
+.profile-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #00ff88;
+  color: #000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  margin-left: 12px;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid #00ff88;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+.autocomplete-list.active {
+  display: block;
+}
+.autocomplete-item {
+  padding: 12px 15px;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.autocomplete-item:hover {
+  background: rgba(0, 255, 136, 0.1);
+  color: #00ff88;
+}
+.autocomplete-badge {
+  font-size: 0.75em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 10px;
+  float: right;
+}
+.badge-player {
+  background: rgba(0, 100, 255, 0.3);
+  color: #00a8ff;
+}
+.badge-club {
+  background: rgba(255, 165, 0, 0.3);
+  color: #ffb84d;
+}
+.badge-tournament {
+  background: rgba(255, 215, 0, 0.3);
+  color: #ffeb3b;
+}
+.navbar-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+.navbar-search-container .form-control {
+  min-width: 240px;
+  max-width: 380px;
+  height: 42px;
+  background: rgba(10, 10, 10, 0.95);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.navbar-search-container .btn {
+  white-space: nowrap;
+  padding: 0.55rem 1rem;
+}
+
+@media (max-width: 991px) {
+  .navbar-search-container {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 1rem;
+  }
+  .navbar-search-container form.d-flex {
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .navbar-search-container .form-control,
+  .navbar-search-container .btn {
+    width: 100%;
+  }
+}
+
+/* Subtle pulsing for profile circle on hover/focus */
+.profile-circle{
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.profile-circle:hover, .profile-circle:focus{
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(0,255,136,0.12);
+}
+
+/* Dropdown fade/slide */
+.dropdown-menu{
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  will-change: opacity, transform;
+}
+.dropdown.show > .dropdown-menu, .dropdown-menu.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* "Más opciones" sliding bar under the dropdown trigger */
+.nav-item.dropdown{
+  position: relative;
+}
+.nav-item.dropdown::after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) scaleY(0);
+  top: 100%;
+  width: 84%;
+  height: 6px;
+  background: linear-gradient(90deg, rgba(0,255,136,0.95), rgba(0,200,255,0.95));
+  border-radius: 6px;
+  transform-origin: top center;
+  transition: transform 0.28s cubic-bezier(.2,.9,.2,1), opacity 0.18s ease;
+  opacity: 0;
+  z-index: 5;
+}
+.nav-item.dropdown.show::after{
+  transform: translateX(-50%) scaleY(1);
+  opacity: 1;
+}
+
+/* smoother dropdown scale + fade from top */
+.dropdown-menu{
+  transform-origin: top center;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(.2,.9,.2,1);
+  will-change: transform, opacity;
+}
+.dropdown.show > .dropdown-menu, .dropdown-menu.show{
+  transform: translateY(6px) scaleY(1);
+  opacity: 1;
+}
+
+/* small pointer bounce for toggler on open */
+.nav-item.dropdown.show > .nav-link.dropdown-toggle{
+  transform: translateY(-2px);
+}
+
+/* Toggler icon grow animation */
+.navbar-toggler{
+  transition: transform 0.18s ease;
+}
+.navbar-toggler:active{
+  transform: scale(0.96);
+}
+
+/* Scrolled state */
+.navbar.nav-scrolled{
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  transform: translateY(-1px);
+}
+
+/* Highlight link with underline animation */
+.nav-link{
+  position: relative;
+}
+.nav-link::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 2px;
+  width: 0;
+  background: #00ff88;
+  transition: width 0.22s ease;
+}
+.nav-link:hover::after{ width: 100%; }
+
+/* Hover animation for top-level nav links */
+.nav-link{
+  transition: color 0.18s ease, transform 0.18s ease, text-shadow 0.18s ease;
+  will-change: transform, color;
+  position: relative;
+}
+.nav-link:hover, .nav-link:focus{
+  transform: translateY(-3px) scale(1.04);
+  color: #00ff88 !important;
+  text-shadow: 0 4px 14px rgba(0,255,136,0.08);
+  animation: footballBounce 0.45s ease-in-out;
+}
+
+.nav-link:hover::before,
+.nav-link:focus::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(0,255,136,0.18) 0%, rgba(0,255,136,0.02) 70%, transparent 100%);
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+/* Dropdown items animation */
+.dropdown-menu .dropdown-item{
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.14s ease;
+  will-change: background-color, transform;
+}
+.dropdown-menu .dropdown-item:hover, .dropdown-menu .dropdown-item:focus{
+  background: linear-gradient(90deg, rgba(0,255,136,0.06), rgba(0,200,255,0.06));
+  color: #00ff88 !important;
+  transform: translateX(6px);
+}
+
+/* Slight stagger for dropdown items when menu opens */
+.dropdown.show .dropdown-item{
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(.2,.9,.2,1);
+}
+.dropdown.show .dropdown-item:nth-child(1){ transition-delay: 0.03s; }
+.dropdown.show .dropdown-item:nth-child(2){ transition-delay: 0.06s; }
+.dropdown.show .dropdown-item:nth-child(3){ transition-delay: 0.09s; }
+.dropdown.show .dropdown-item:nth-child(4){ transition-delay: 0.12s; }
+.dropdown.show .dropdown-item:nth-child(5){ transition-delay: 0.15s; }
+.dropdown.show .dropdown-item{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Small screens tweaks */
+@media (max-width: 576px){
+  .profile-circle{ width:36px; height:36px; }
+}
+
+/* Logo styles for site branding */
+.site-logo-small{
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  border: 2px solid rgba(255,255,255,0.06);
+}
+.site-logo-large{
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  border: 3px solid rgba(0,255,136,0.06);
+}
+.hero-section .brand-highlight{ color: #00ff88; }
+@media (max-width: 768px){
+  .site-logo-large{ width: 110px; height: 110px; margin-bottom: 12px; }
+  .hero-section{ flex-direction: column; gap: 12px; }
+}

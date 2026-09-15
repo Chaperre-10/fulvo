@@ -1,0 +1,8 @@
+/* Estilos de las imágenes pequeñas usadas en el banner y sus tarjetas. */
+img{
+    width: 60px;          /* Tamaño de la imagen */
+    height: 60px;
+    border: 4px solid #00ff88; /* Borde verde*/
+    border-radius: 8px;  /* Esquinas redondeadas */
+ 
+}

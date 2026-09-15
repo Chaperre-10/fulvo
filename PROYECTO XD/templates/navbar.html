@@ -1,0 +1,50 @@
+{# Barra de navegación principal, enlaces de acceso y buscador global. #}
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center fw-bold" href="{{ url_for('index') }}">
+      <img src="{{ url_for('static', filename='IMG/MyDeportLogo.png') }}" alt="MyDeport logo" class="site-logo-small me-2">
+      <span class="brand-text">MyDeport</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('partidos') }}">Partidos</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('news') }}">Foro de noticias</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('op') }}">Foro de opiniones</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('contact') }}">Contáctenos</a></li>
+        {% if session.get('user_id') %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}">Perfil</a></li>
+        {% if session.get('is_admin') %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin') }}">Panel admin</a></li>
+        {% endif %}
+        {% else %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Iniciar Sesión</a></li>
+        {% endif %}
+      </ul>
+      <div class="navbar-search-container">
+        <form class="d-flex" role="search" action="{{ url_for('search') }}" method="GET">
+          <input class="form-control me-2 bg-dark text-white border-secondary" type="search" name="q" id="searchInput" placeholder="Buscar jugador, club o torneo..." autocomplete="off" required>
+          <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+        <div class="autocomplete-list" id="autocompleteList"></div>
+      </div>
+      {% if session.get('user_id') %}
+      <div class="dropdown ms-2">
+        <a class="profile-circle dropdown-toggle" href="#" role="button" id="profileMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ session.get('user_name')[0]|upper if session.get('user_name') }}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="profileMenu">
+          <li><a class="dropdown-item" href="{{ url_for('profile') }}">Mi perfil</a></li>
+          {% if session.get('is_admin') %}
+          <li><a class="dropdown-item" href="{{ url_for('admin') }}">Panel admin</a></li>
+          {% endif %}
+          <li><a class="dropdown-item" href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<script src="{{ url_for('static', filename='JS/navbar.js') }}"></script>

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | {{ title }}{% endblock %}
+
+{# Estilos de la pantalla que informa errores controlados. #}
+{% block extra_head %}
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='IMG/07.png') }}") no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .error-card {
+            background: rgba(10, 10, 10, 0.94);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(0, 255, 136, 0.35);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+            max-width: 720px;
+            width: 100%;
+            text-align: center;
+        }
+        .error-card h1 { color: #00ff88; margin-bottom: 20px; }
+        .error-card p { color: #ccc; margin-bottom: 24px; line-height: 1.7; }
+        .error-card a { color: #000; background: #00ff88; padding: 12px 28px; border-radius: 999px; text-decoration: none; font-weight: 700; }
+        .error-card a:hover { background: #00cc6e; }
+    </style>
+{% endblock %}
+
+{# Mensaje de error y acción disponible para continuar navegando. #}
+{% block content %}
+<main class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 80px);">
+    <div class="error-card">
+        <h1>{{ title }}</h1>
+        <p>{{ message }}</p>
+        <a href="{{ url_for('index') }}">Volver al inicio</a>
+    </div>
+</main>
+{% endblock %}

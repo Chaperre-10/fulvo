@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | Clubes{% endblock %}
+
+{# Estilos del catálogo de clubes y sus tarjetas informativas. #}
+{% block extra_head %}
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='IMG/euro2024.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+        .page-content { padding: 40px 20px; }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        h1 { color: #00ff88; text-align: center; margin-bottom: 50px; text-shadow: 0 0 20px rgba(0,255,136,0.5); font-weight: 700; font-size: 3em; animation: slideInUp 0.6s ease-out; }
+        .club-card { background: linear-gradient(135deg, rgba(30,30,30,0.95), rgba(20,20,20,0.95)); border: 2px solid #ffa500; border-radius: 16px; padding: 25px; margin-bottom: 25px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); animation: slideInUp 0.6s ease-out; animation-fill-mode: both; }
+        .club-card:nth-child(1) { animation-delay: 0.1s; border-color: #ffa500; }
+        .club-card:nth-child(2) { animation-delay: 0.2s; border-color: #ff8c00; }
+        .club-card:nth-child(3) { animation-delay: 0.3s; border-color: #ff7f50; }
+        .club-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 50px rgba(255, 165, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.2); }
+        .club-name { color: #ffa500; font-weight: bold; font-size: 1.8em; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255, 165, 0, 0.5); }
+        .club-info { font-size: 1em; margin: 8px 0; }
+        .info-label { color: #ffa500; font-weight: 700; text-transform: uppercase; font-size: 0.85em; }
+        .container { max-width: 1100px; }
+    </style>
+{% endblock %}
+
+{# Lista de clubes disponibles para consultar. #}
+{% block content %}
+<main class="page-content">
+<div class="container">
+    <h1>🏟️ Clubes</h1>
+    {% if clubs %}
+        {% for club in clubs %}
+        <div class="club-card">
+            <div class="club-name">{{ club.nombre }}</div>
+            <div class="club-info"><span class="info-label">País:</span> {{ club.pais }}</div>
+            <div class="club-info"><span class="info-label">Ciudad:</span> {{ club.ciudad }}</div>
+            <div class="club-info"><span class="info-label">Estadio:</span> {{ club.estadio }}</div>
+            <div class="club-info"><span class="info-label">Año de fundación:</span> {{ club.ano_fundacion }}</div>
+            <div class="club-info" style="margin-top: 15px; color: #ddd;">{{ club.descripcion }}</div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info text-center">No hay clubes registrados.</div>
+    {% endif %}
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('profile') }}" class="btn btn-outline-light">← Volver al perfil</a>
+        <a href="{{ url_for('tournaments') }}" class="btn btn-outline-success">🏆 Ver torneos</a>
+    </div>
+</div>
+</main>
+{% endblock %}

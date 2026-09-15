@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | Partidos{% endblock %}
+
+{# Estilos, filtros y componentes de la pantalla de partidos. #}
+{% block extra_head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/partidos.css') }}">
+    <style>
+      body {
+        background-image: url("{{ url_for('static', filename='IMG/CHAMPIONS.jpg') }}");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+      }
+    </style>
+{% endblock %}
+
+{# Contenido interactivo de ligas, partidos, cuotas y predicciones. #}
+{% block content %}
+<main class="page-content">
+  <div class="container">
+    <div class="sports-topbar">
+      <div class="sports-tabs">
+        <button type="button" class="sports-tab active" data-tab="live">Live</button>
+        <button type="button" class="sports-tab" data-tab="predictions">Predicciones</button>
+      </div>
+      <div class="sports-status-pill">
+        <span class="status-dot"></span>
+        Updated now
+      </div>
+    </div>
+
+    <div class="page-header-row">
+      <h1>Partidos</h1>
+      <div class="league-filter-box">
+        <label for="leagueFilter">Filtrar liga:</label>
+        <select id="leagueFilter">
+          <option value="Todos">Todas</option>
+          <option value="Liga BetPlay Dimayor">Liga Colombiana</option>
+          <option value="Premier League">Premier League</option>
+          <option value="La Liga">La Liga</option>
+          <option value="Serie A">Serie A</option>
+          <option value="UEFA Champions League">UEFA Champions League</option>
+          <option value="UEFA Europa League">UEFA Europa League</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="dashboard-layout">
+      <div id="leaguesList" class="dashboard-main">
+        <p class="text-center text-muted">Cargando partidos...</p>
+      </div>
+
+      <aside class="premium-sidebar">
+        <div class="sidebar-box">
+          <div class="sidebar-title">Top markets</div>
+          <ul class="market-list">
+            <li><span>1X2</span><strong>+34%</strong></li>
+            <li><span>BTTS</span><strong>+21%</strong></li>
+            <li><span>Over 2.5</span><strong>+18%</strong></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-box">
+          <div class="sidebar-title">Trending picks</div>
+          <ul class="pick-list">
+            <li><span>Real Madrid</span><strong>2.10</strong></li>
+            <li><span>Both Teams To Score</span><strong>1.85</strong></li>
+            <li><span>Juventus vs Inter</span><strong>2.65</strong></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <div id="predictionPanel" class="prediction-panel hidden">
+      <div class="prediction-panel-header">
+        <h2>Mi predicción</h2>
+      </div>
+      <div id="predictionMatchList"></div>
+      <div id="predictionForm"></div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{# Scripts que cargan y actualizan dinámicamente los partidos. #}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='JS/partidos-simple.js') }}"></script>
+{% endblock %}

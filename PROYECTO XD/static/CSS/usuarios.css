@@ -1,0 +1,81 @@
+/* Estilos de las vistas de usuarios, tarjetas, formularios y botones. */
+/* Estilo general */
+body {
+    background-color: #0a0a0a;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Encabezado */
+header {
+    background-color: #001f3f;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-bottom: 3px solid #00aaff;
+}
+
+/* Menú de navegación */
+nav {
+    background-color: #111;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: #00aaff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: white;
+}
+
+/* Contenido principal */
+main {
+    padding: 20px;
+}
+
+/* Tarjetas o secciones */
+.card {
+    background-color: #1a1a1a;
+    border: 2px solid #00aaff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+}
+
+/* Botones */
+button {
+    background-color: #00aaff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0077cc;
+}
+
+/* Imágenes */
+img {
+    max-width: 100%;
+    border: 3px solid #00aaff;
+    border-radius: 10px;
+}
+
+/* Pie de página */
+footer {
+    background-color: #001f3f;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
+}

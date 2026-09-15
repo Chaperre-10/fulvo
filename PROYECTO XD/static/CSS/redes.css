@@ -1,0 +1,80 @@
+﻿/* Estilos del pie de página, patrocinador y enlaces de redes sociales. */
+.site-footer{
+    background: rgba(10,10,10,0.6);
+    border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.footer-social,
+.footer-sponsor{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 1rem 0;
+}
+
+.footer-social{
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-social a,
+.footer-sponsor a{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icon{
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.social-icon:hover{
+    transform: scale(1.15);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+}
+
+.sponsor-logo{
+    width: 84px;
+    height: 84px;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.1);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.22);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.sponsor-link:hover .sponsor-logo{
+    transform: scale(1.05);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.24);
+}
+
+.sponsor-text{
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+@media (max-width: 576px){
+    .footer-social,
+    .footer-sponsor{
+        padding: 0.8rem 0;
+        gap: 12px;
+    }
+    .sponsor-logo{
+        width: 64px;
+        height: 64px;
+    }
+    .social-icon{
+        width: 36px;
+        height: 36px;
+    }
+    .sponsor-text{
+        font-size: 0.95rem;
+        text-align: center;
+    }
+}

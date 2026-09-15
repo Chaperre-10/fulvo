@@ -1,0 +1,385 @@
+/* Estilos de la vista alternativa de partidos, ligas y cuotas. */
+
+.page-content {
+    padding: 40px 20px;
+}
+
+h1 {
+    color: #00ff88;
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+    font-weight: 700;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* LIGA PANELS */
+.league-panel {
+    background: rgba(14, 18, 20, 0.85);
+    border: 2px solid rgba(0, 255, 136, 0.7);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 18px rgba(0, 255, 136, 0.12);
+}
+
+.league-title {
+    color: #00ff88;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(0, 255, 136, 0.08);
+    border: 1px solid rgba(0, 255, 136, 0.35);
+    font-size: 1.05rem;
+}
+
+/* MATCH CARDS */
+.match-card {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.96), rgba(18, 18, 18, 0.95));
+    border: 1px solid rgba(0, 255, 136, 0.45);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.match-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(0, 255, 136, 0.15);
+    border-color: rgba(0, 255, 136, 0.7);
+}
+
+/* TEAMS SECTION */
+.match-teams {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.team-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+    padding: 8px 0;
+}
+
+.local-label {
+    color: #00ff88;
+    font-weight: 600;
+    min-width: 70px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.visit-label {
+    color: #ff8800;
+    font-weight: 600;
+    min-width: 70px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.team-row strong {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    flex: 1;
+}
+
+/* DETAILS SECTION */
+.match-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid rgba(0, 255, 136, 0.2);
+    padding-top: 12px;
+}
+
+.detail-row {
+    color: #ccc;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ODDS SECTION */
+.odds-container {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.odd-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 75px;
+}
+
+.odd-label {
+    font-size: 0.75rem;
+    color: #aaa;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.odd-value {
+    background: rgba(0, 255, 136, 0.12);
+    border: 1px solid rgba(0, 255, 136, 0.4);
+    border-radius: 8px;
+    padding: 7px 10px;
+    color: #00ff88;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-align: center;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.odd-value:hover {
+    background: rgba(0, 255, 136, 0.18);
+    border-color: rgba(0, 255, 136, 0.6);
+    transform: scale(1.05);
+}
+
+/* FEATURED SECTION */
+.featured-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.featured-card {
+    background: linear-gradient(135deg, rgba(16, 24, 21, 0.96), rgba(26, 28, 26, 0.95));
+    border: 2px solid rgba(0, 255, 136, 0.8);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featured-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 28px rgba(0, 255, 136, 0.2);
+    border-color: rgba(0, 255, 136, 1);
+}
+
+.featured-title {
+    color: #00ff88;
+    font-weight: 800;
+    margin-bottom: 14px;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.featured-match {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 14px;
+    margin-bottom: 12px;
+    padding: 14px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.featured-team {
+    flex: 1;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.team-vs {
+    color: #00ff88;
+    font-weight: 900;
+    font-size: 0.85rem;
+    margin: 0 8px;
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+.featured-meta {
+    color: #bbb;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    padding: 8px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 8px;
+}
+
+.featured-odds {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 12px 0;
+}
+
+.featured-odds .odd-pill {
+    padding: 7px 10px;
+    min-width: 60px;
+    font-size: 0.9rem;
+    background: rgba(0, 255, 136, 0.12);
+    border: 1px solid rgba(0, 255, 136, 0.4);
+    border-radius: 8px;
+    color: #00ff88;
+    font-weight: 700;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.featured-odds .odd-pill:hover {
+    background: rgba(0, 255, 136, 0.18);
+    border-color: rgba(0, 255, 136, 0.6);
+}
+
+/* UTILITY CLASSES */
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: #888;
+}
+
+.mb-4 {
+    margin-bottom: 24px;
+}
+
+.mb-2 {
+    margin-bottom: 12px;
+}
+
+.mt-2 {
+    margin-top: 12px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .page-content {
+        padding: 30px 15px;
+    }
+
+    h1 {
+        margin-bottom: 25px;
+        font-size: 1.8rem;
+    }
+
+    .league-panel {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .match-card {
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .match-teams {
+        gap: 8px;
+    }
+
+    .team-row {
+        padding: 6px 0;
+    }
+
+    .team-row strong {
+        font-size: 0.95rem;
+    }
+
+    .detail-row {
+        font-size: 0.85rem;
+    }
+
+    .odds-container {
+        justify-content: space-around;
+    }
+
+    .odd-item {
+        min-width: 65px;
+    }
+
+    .featured-match {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .featured-team {
+        width: 100%;
+    }
+
+    .team-vs {
+        margin: 0;
+    }
+
+    .featured-odds {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-content {
+        padding: 20px 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .league-title {
+        font-size: 0.95rem;
+        padding: 8px 10px;
+        margin-bottom: 14px;
+    }
+
+    .match-card {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    .local-label,
+    .visit-label {
+        min-width: 60px;
+        font-size: 0.75rem;
+    }
+
+    .team-row strong {
+        font-size: 0.9rem;
+    }
+
+    .odd-item {
+        min-width: 55px;
+        gap: 2px;
+    }
+
+    .odd-label {
+        font-size: 0.7rem;
+    }
+
+    .odd-value {
+        font-size: 0.85rem;
+        padding: 5px 8px;
+    }
+}

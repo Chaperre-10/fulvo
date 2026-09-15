@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | Panel Admin{% endblock %}
+
+{# Estilos del panel administrativo y sus tablas de gestión. #}
+{% block extra_head %}
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='IMG/07.png') }}");
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+        .page-content { padding: 40px 20px; }
+        .table-dark { background: rgba(20,20,20,0.9); }
+        .services-section { background: rgba(30,30,30,0.9); border: 1px solid #00ff88; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
+        .service-btn { width: 100%; text-align: left; padding: 12px; font-weight: 500; margin-bottom: 8px; }
+    </style>
+{% endblock %}
+
+{# Gestión de usuarios, noticias, comentarios y predicciones. #}
+{% block content %}
+<main class="page-content">
+<div class="container">
+    <h1 class="mb-4" style="color: #00ff88;">Panel de administración</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="services-section">
+        <h5 style="color: #00ff88; margin-bottom: 15px;">Servicios disponibles</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <a href="{{ url_for('players') }}" class="btn btn-outline-success service-btn">👥 Ver jugadores</a>
+                <a href="{{ url_for('clubs') }}" class="btn btn-outline-success service-btn">🏟️ Ver clubes</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{{ url_for('tournaments') }}" class="btn btn-outline-success service-btn">🏆 Ver torneos</a>
+                <a href="#contact-messages" class="btn btn-outline-info service-btn">✉️ Mensajes de contacto ({{ mensajes_contacto_admin|length }})</a>
+            </div>
+        </div>
+    </div>
+
+    <h3 style="color: #00ff88; margin-top: 40px; margin-bottom: 20px;">Gestión de usuarios</h3>
+    <table class="table table-dark table-striped align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.nombre }}</td>
+                <td>{{ user.correo }}</td>
+                <td>{{ user.usuario }}</td>
+                <td>{% if user.is_admin %}Admin{% else %}Usuario{% endif %}</td>
+                <td>
+                    {% if not user.is_admin %}
+                    <button class="btn btn-sm btn-outline-warning me-1" type="button" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user-id="{{ user.id }}" data-user-name="{{ user.nombre }}" data-user-correo="{{ user.correo }}" data-user-usuario="{{ user.usuario }}">Editar</button>
+                    <button class="btn btn-sm btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-user-id="{{ user.id }}" data-user-name="{{ user.nombre }}">Eliminar</button>
+                    {% else %}
+                    <span class="text-muted">No editable</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 style="color: #00ff88; margin-top: 40px; margin-bottom: 20px;">Gestión de noticias</h3>
+    {% if noticias_admin %}
+        {% for noticia in noticias_admin %}
+        <div class="card bg-dark border-secondary mb-3">
+            <div class="card-body">
+                <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+                    <div>
+                        <h5 class="card-title text-white">{{ noticia.titulo }}</h5>
+                        <p class="text-muted mb-1">Publicado por {{ noticia.autor or 'Desconocido' }} el {{ noticia.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                        {% if noticia.fecha_modificacion %}
+                        <p class="text-secondary mb-0">Modificado el {{ noticia.fecha_modificacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex gap-2 align-items-start">
+                        <form method="post" action="{{ url_for('admin_delete_news', news_id=noticia.id) }}">
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+                <details class="mt-3 text-white">
+                    <summary class="text-white">Editar noticia</summary>
+                    <form method="post" action="{{ url_for('admin_edit_news', news_id=noticia.id) }}" class="row g-2 mt-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Título</label>
+                            <input type="text" name="titulo" class="form-control bg-secondary text-white" value="{{ noticia.titulo }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Enlace</label>
+                            <input type="url" name="enlace" class="form-control bg-secondary text-white" value="{{ noticia.enlace or '' }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Resumen</label>
+                            <textarea name="resumen" class="form-control bg-secondary text-white" rows="3" required>{{ noticia.resumen }}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Imagen</label>
+                            <input type="text" name="imagen" class="form-control bg-secondary text-white" value="{{ noticia.imagen or '' }}" placeholder="Ej: IMG/01.jpg">
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="submit" class="btn btn-sm btn-warning">Guardar noticia</button>
+                        </div>
+                    </form>
+                </details>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-secondary">No hay noticias registradas.</div>
+    {% endif %}
+
+    <h3 style="color: #00ff88; margin-top: 40px; margin-bottom: 20px;">Gestión de comentarios</h3>
+    {% if comentarios_admin %}
+        {% for comentario in comentarios_admin %}
+        <div class="card bg-dark border-secondary mb-3">
+            <div class="card-body">
+                <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+                    <div>
+                        <p class="text-white mb-1">{{ comentario.comentario }}</p>
+                        <p class="text-muted mb-0">Publicado por {{ comentario.autor or 'Desconocido' }} el {{ comentario.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                        {% if comentario.fecha_modificacion %}
+                        <p class="text-secondary mb-0">Modificado el {{ comentario.fecha_modificacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex gap-2 align-items-start">
+                        <form method="post" action="{{ url_for('admin_delete_comment', comment_id=comentario.id) }}">
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+                <details class="mt-3 text-white">
+                    <summary class="text-white">Editar comentario</summary>
+                    <form method="post" action="{{ url_for('admin_edit_comment', comment_id=comentario.id) }}" class="row g-2 mt-2">
+                        <div class="col-12">
+                            <textarea name="comentario" class="form-control bg-secondary text-white" rows="3" required>{{ comentario.comentario }}</textarea>
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="submit" class="btn btn-sm btn-warning">Guardar comentario</button>
+                        </div>
+                    </form>
+                </details>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-secondary">No hay comentarios registrados.</div>
+    {% endif %}
+
+    <h3 style="color: #00ff88; margin-top: 40px; margin-bottom: 20px;">Gestión de predicciones</h3>
+    {% if predicciones_admin %}
+        {% for pred in predicciones_admin %}
+        <div class="card bg-dark border-secondary mb-3">
+            <div class="card-body">
+                <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+                    <div>
+                        <h5 class="text-white mb-1">{{ pred.home_team }} vs {{ pred.away_team }}</h5>
+                        <p class="text-muted mb-1">Liga: {{ pred.league_name or 'Sin liga' }} · Usuario: {{ pred.autor or 'Desconocido' }}</p>
+                        <p class="text-muted mb-1">Fecha: {{ pred.kickoff.strftime('%d/%m/%Y %H:%M') if pred.kickoff else 'Sin fecha' }}</p>
+                        <p class="text-white mb-0"><strong>Predicción:</strong> {{ pred.prediction }}</p>
+                    </div>
+                    <div class="d-flex gap-2 align-items-start">
+                        <form method="post" action="{{ url_for('admin_delete_prediction', prediction_id=pred.id) }}">
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <details class="mt-3 text-white">
+                    <summary class="text-white">Editar predicción</summary>
+                    <form method="post" action="{{ url_for('admin_edit_prediction', prediction_id=pred.id) }}" class="row g-2 mt-2">
+                        <div class="col-12">
+                            <input type="text" name="prediction" value="{{ pred.prediction }}" class="form-control bg-secondary text-white" placeholder="Ej: 2-1, 1-0, Empate" required>
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="submit" class="btn btn-sm btn-warning">Guardar predicción</button>
+                        </div>
+                    </form>
+                </details>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-secondary">No hay predicciones registradas.</div>
+    {% endif %}
+
+    <h3 id="contact-messages" style="color: #00ff88; margin-top: 40px; margin-bottom: 20px;">Gestión de mensajes de contacto</h3>
+    {% if mensajes_contacto_admin %}
+        {% for mensaje in mensajes_contacto_admin %}
+        <div class="card bg-dark border-secondary mb-3">
+            <div class="card-body">
+                <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+                    <div>
+                        <h5 class="card-title text-white">{{ mensaje.asunto }}</h5>
+                        <p class="text-muted mb-1">De: {{ mensaje.nombre }} · {{ mensaje.correo }}</p>
+                        <p class="text-muted mb-1">Recibido el {{ mensaje.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                        {% if mensaje.fecha_modificacion %}
+                        <p class="text-secondary mb-1">Modificado el {{ mensaje.fecha_modificacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                        {% endif %}
+                        <span class="badge {% if mensaje.estado == 'nuevo' %}bg-danger{% elif mensaje.estado == 'leido' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                            {{ mensaje.estado|capitalize }}
+                        </span>
+                    </div>
+                    <div class="d-flex gap-2 align-items-start">
+                        <form method="post" action="{{ url_for('admin_delete_contact', message_id=mensaje.id) }}">
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+                <p class="text-white mt-3 mb-2" style="white-space: pre-wrap;">{{ mensaje.mensaje }}</p>
+                <details class="mt-3 text-white">
+                    <summary class="text-white">Editar mensaje</summary>
+                    <form method="post" action="{{ url_for('admin_edit_contact', message_id=mensaje.id) }}" class="row g-2 mt-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" name="nombre" class="form-control bg-secondary text-white" value="{{ mensaje.nombre }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Correo</label>
+                            <input type="email" name="correo" class="form-control bg-secondary text-white" value="{{ mensaje.correo }}" required>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">Asunto</label>
+                            <input type="text" name="asunto" class="form-control bg-secondary text-white" value="{{ mensaje.asunto }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select bg-secondary text-white" required>
+                                <option value="nuevo" {% if mensaje.estado == 'nuevo' %}selected{% endif %}>Nuevo</option>
+                                <option value="leido" {% if mensaje.estado == 'leido' %}selected{% endif %}>Leído</option>
+                                <option value="respondido" {% if mensaje.estado == 'respondido' %}selected{% endif %}>Respondido</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Mensaje</label>
+                            <textarea name="mensaje" class="form-control bg-secondary text-white" rows="4" required>{{ mensaje.mensaje }}</textarea>
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="submit" class="btn btn-sm btn-warning">Guardar mensaje</button>
+                        </div>
+                    </form>
+                </details>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-secondary">No hay mensajes de contacto registrados.</div>
+    {% endif %}
+
+    <a href="{{ url_for('profile') }}" class="btn btn-outline-light">Volver al perfil</a>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmDeleteLabel">Confirmar eliminación</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <p id="confirmDeleteText">¿Seguro que quieres eliminar a este usuario?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <form id="deleteForm" method="post" class="d-inline">
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de edición de usuario -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editUserLabel">Editar usuario</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <form id="editUserForm" method="post">
+              <div class="mb-3">
+                <label for="edit_nombre" class="form-label">Nombre</label>
+                <input type="text" id="edit_nombre" name="nombre" class="form-control bg-secondary text-white" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit_correo" class="form-label">Correo</label>
+                <input type="email" id="edit_correo" name="correo" class="form-control bg-secondary text-white" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit_usuario" class="form-label">Usuario</label>
+                <input type="text" id="edit_usuario" name="usuario" class="form-control bg-secondary text-white" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit_password" class="form-label">Nueva contraseña (opcional)</label>
+                <input type="password" id="edit_password" name="password" class="form-control bg-secondary text-white">
+              </div>
+              <div class="mb-3">
+                <label for="edit_confirmar" class="form-label">Confirmar contraseña</label>
+                <input type="password" id="edit_confirmar" name="confirmar" class="form-control bg-secondary text-white">
+              </div>
+              <div class="modal-footer px-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-warning">Guardar cambios</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</main>
+{% endblock %}
+
+{# Scripts para confirmar eliminaciones y cargar formularios administrativos. #}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var confirmModal = document.getElementById('confirmDeleteModal');
+        confirmModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var userId = button.getAttribute('data-user-id');
+            var userName = button.getAttribute('data-user-name');
+            var confirmText = document.getElementById('confirmDeleteText');
+            confirmText.textContent = '¿Seguro que quieres eliminar a "' + userName + '"? Esta acción no se puede deshacer.';
+            var form = document.getElementById('deleteForm');
+            form.action = '/admin/delete/' + userId;
+        });
+        var editModal = document.getElementById('editUserModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var userId = button.getAttribute('data-user-id');
+            var userName = button.getAttribute('data-user-name');
+            var userCorreo = button.getAttribute('data-user-correo');
+            var userUsuario = button.getAttribute('data-user-usuario');
+            document.getElementById('edit_nombre').value = userName || '';
+            document.getElementById('edit_correo').value = userCorreo || '';
+            document.getElementById('edit_usuario').value = userUsuario || '';
+            document.getElementById('edit_password').value = '';
+            document.getElementById('edit_confirmar').value = '';
+            var editForm = document.getElementById('editUserForm');
+            editForm.action = '/admin/edit/' + userId;
+        });
+    });
+</script>
+{% endblock %}

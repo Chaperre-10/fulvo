@@ -1,0 +1,685 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | Tu Portal Deportivo{% endblock %}
+
+{# Estilos y configuración visual exclusiva de la página de inicio. #}
+{% block extra_head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/redes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/banner.css') }}">
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='IMG/aura.jfif') }}") center/cover no-repeat fixed;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .home-shell {
+            padding: 32px 0 80px;
+        }
+
+        .hero-panel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 28px;
+            padding: 42px 30px;
+            background: linear-gradient(135deg, rgba(3, 8, 6, 0.96), rgba(0, 255, 136, 0.12));
+            border: 1px solid rgba(0, 255, 136, 0.36);
+            box-shadow: 0 25px 65px rgba(0, 255, 136, 0.08), 0 0 0 1px rgba(255,255,255,0.04);
+            margin-bottom: 30px;
+        }
+
+        .hero-panel::before {
+            content: "";
+            position: absolute;
+            inset: -30% auto auto -10%;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.28), transparent 60%);
+            filter: blur(20px);
+        }
+
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            inset: auto -15% -30% auto;
+            width: 340px;
+            height: 340px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.18), transparent 60%);
+            filter: blur(22px);
+        }
+
+        .hero-copy,
+        .hero-visual {
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(0, 255, 136, 0.12);
+            border: 1px solid rgba(0, 255, 136, 0.35);
+            color: #dfffee;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 4vw, 5rem);
+            line-height: 0.98;
+            margin: 18px 0 16px;
+            font-weight: 900;
+        }
+
+        .brand-highlight {
+            background: linear-gradient(120deg, #ffffff, #00ff88, #d1fae5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            max-width: 620px;
+            color: rgba(255,255,255,0.8);
+            font-size: 1.08rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 22px;
+        }
+
+        .btn-cta {
+            border: none;
+            border-radius: 999px;
+            padding: 12px 22px;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary-cta {
+            background: linear-gradient(135deg, #00ff88, #00d977);
+            color: #05130d;
+            box-shadow: 0 15px 25px rgba(0, 255, 136, 0.28);
+        }
+
+        .btn-secondary-cta {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border: 1px solid rgba(0, 255, 136, 0.35);
+        }
+
+        .hero-visual {
+            display: grid;
+            gap: 16px;
+        }
+
+        .dashboard-panel {
+            padding: 18px;
+            border-radius: 24px;
+            background: rgba(8, 12, 10, 0.8);
+            border: 1px solid rgba(0, 255, 136, 0.22);
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 30px rgba(0,0,0,0.22);
+        }
+
+        .panel-mini-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #cbd5e1;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(0, 255, 136, 0.12);
+            color: #9ef7c8;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.8);
+        }
+
+        .live-match {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(0, 0, 0, 0.38);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .team-score {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .team-shield {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00ff88, #0c5b3d);
+            color: #02160d;
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .mini-stat {
+            padding: 14px 12px;
+            border-radius: 18px;
+            text-align: center;
+            background: rgba(10, 15, 12, 0.8);
+            border: 1px solid rgba(0, 255, 136, 0.18);
+        }
+
+        .mini-stat strong {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+            font-weight: 800;
+        }
+
+        .mini-stat span {
+            color: #a5b4cf;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(7, 11, 9, 0.8);
+            border-radius: 22px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            padding: 22px 18px;
+            box-shadow: 0 18px 34px rgba(0,0,0,0.18);
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            inset: auto 0 0 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00ff88, #9ef7c8, #ffffff);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 16px;
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.18), rgba(255,255,255,0.06));
+            border: 1px solid rgba(0, 255, 136, 0.25);
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: -0.05em;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .panel-block {
+            background: rgba(8, 10, 9, 0.82);
+            border: 1px solid rgba(0, 255, 136, 0.18);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 18px 34px rgba(0,0,0,0.16);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .panel-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(0, 255, 136, 0.12);
+            color: #dfffee;
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border: 1px solid rgba(0, 255, 136, 0.28);
+        }
+
+        .match-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .match-card {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            border-radius: 18px;
+            background: rgba(2, 6, 23, 0.42);
+            border: 1px solid rgba(148,163,184,0.12);
+        }
+
+        .match-date {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 72px;
+            min-height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.12), rgba(255,255,255,0.04));
+            border: 1px solid rgba(0, 255, 136, 0.24);
+            text-align: center;
+            line-height: 1.1;
+            font-weight: 800;
+            color: #dfffee;
+        }
+
+        .match-teams {
+            font-weight: 700;
+            font-size: 1.02rem;
+            color: #f8fafc;
+        }
+
+        .match-category {
+            display: block;
+            color: #a5b4cf;
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .match-score {
+            font-weight: 900;
+            font-size: 1.15rem;
+            color: #00ff88;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .quick-card {
+            display: block;
+            padding: 18px 16px;
+            border-radius: 18px;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.08), rgba(255,255,255,0.02));
+            border: 1px solid rgba(0, 255, 136, 0.22);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0, 255, 136, 0.5);
+            text-decoration: none;
+            color: white;
+        }
+
+        .quick-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 14px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            font-size: 1.2rem;
+        }
+
+        .quick-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .quick-card p {
+            margin: 0;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.78rem;
+            line-height: 1.5;
+        }
+
+        .news-grid {
+            display: grid;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .news-card {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 16px;
+            padding: 12px;
+            border-radius: 20px;
+            background: rgba(5, 11, 8, 0.7);
+            border: 1px solid rgba(0, 255, 136, 0.14);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 116px;
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+        .news-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 1.04rem;
+            font-weight: 800;
+        }
+
+        .news-card p {
+            margin: 0 0 12px 0;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.82rem;
+            line-height: 1.6;
+        }
+
+        .news-card a {
+            text-decoration: none;
+            color: #00ff88;
+            font-weight: 700;
+        }
+
+        .news-card a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-panel {
+                padding: 28px 18px;
+            }
+
+            .stats-row,
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .news-card {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+{% endblock %}
+
+{# Contenido de inicio: presentación, estadísticas, noticias y accesos deportivos. #}
+{% block content %}
+<div class="container home-shell">
+    {# Bloque principal de bienvenida y resumen visual del portal. #}
+    <section class="hero-panel row align-items-center g-4">
+        <div class="hero-copy col-lg-7">
+            <span class="eyebrow">⚽ Live • comunidad • análisis</span>
+            <h1 class="hero-title">Todo el <span class="brand-highlight">fútbol</span> en un solo lugar.</h1>
+            <p class="hero-subtitle">Consulta partidos, sigue noticias de alto impacto, descubre jugadores y clubes destacados, y navega en un panel deportivo moderno pensado para fanáticos reales del deporte.</p>
+            <div class="hero-actions">
+                <a href="{{ url_for('partidos') }}" class="btn btn-cta btn-primary-cta">Ver partidos</a>
+                <a href="{{ url_for('players') }}" class="btn btn-cta btn-secondary-cta">Explorar jugadores</a>
+            </div>
+        </div>
+
+        <div class="hero-visual col-lg-5">
+            <div class="dashboard-panel">
+                <div class="panel-mini-header">
+                    <span>Panel en vivo</span>
+                    <span class="status-pill"><span class="status-dot"></span>online</span>
+                </div>
+
+                <div class="live-match">
+                    <div class="team-shield">RM</div>
+                    <div class="team-score">2 : 1</div>
+                    <div class="team-shield" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">PSG</div>
+                </div>
+
+                <div class="mini-grid">
+                    <div class="mini-stat">
+                        <strong>{{ total_matches }}</strong>
+                        <span>partidos</span>
+                    </div>
+                    <div class="mini-stat">
+                        <strong>{{ total_players }}</strong>
+                        <span>jugadores</span>
+                    </div>
+                    <div class="mini-stat">
+                        <strong>{{ total_clubs }}</strong>
+                        <span>clubes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Indicadores resumidos de la actividad deportiva disponible. #}
+    <section class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon">⚽</div>
+            <span class="stat-value" data-target="{{ total_matches }}">0</span>
+            <div class="stat-label">Partidos registrados</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏟️</div>
+            <span class="stat-value" data-target="{{ total_clubs }}">0</span>
+            <div class="stat-label">Clubes activos</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <span class="stat-value" data-target="{{ total_players }}">0</span>
+            <div class="stat-label">Jugadores destacados</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <span class="stat-value" data-target="{{ total_tournaments }}">0</span>
+            <div class="stat-label">Competiciones</div>
+        </div>
+    </section>
+
+    {# Accesos rápidos a las áreas principales de la aplicación. #}
+    <section class="content-grid">
+        <div class="panel-block">
+            <div class="panel-header">
+                <h2 class="panel-title">Próximos partidos</h2>
+                <span class="chip">Agenda</span>
+            </div>
+
+            <div class="match-list">
+                {% for match in upcoming_matches %}
+                <div class="match-card">
+                    <div class="match-date">
+                        {{ match.kickoff.strftime('%d') if match.kickoff else '—' }}<br>
+                        {{ match.kickoff.strftime('%b') if match.kickoff else '' }}
+                    </div>
+                    <div>
+                        <div class="match-teams">{{ match.home_team }} vs {{ match.away_team }}</div>
+                        <span class="match-category">{{ match.league_name or 'Competición' }}</span>
+                    </div>
+                    <div class="match-score">{{ match.kickoff.strftime('%H:%M') if match.kickoff else 'Por definir' }}</div>
+                </div>
+                {% else %}
+                <div class="match-card">
+                    <div class="match-date">NEW</div>
+                    <div>
+                        <div class="match-teams">Aún no hay partidos agregados</div>
+                        <span class="match-category">Actualiza la agenda deportiva</span>
+                    </div>
+                    <div class="match-score">—</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel-block">
+            <div class="panel-header">
+                <h2 class="panel-title">Acceso rápido</h2>
+                <span class="chip">Navega</span>
+            </div>
+
+            <div class="quick-grid">
+                <a href="{{ url_for('players') }}" class="quick-card">
+                    <div class="quick-icon">👤</div>
+                    <h4>Jugadores</h4>
+                    <p>Perfiles, estadísticas y talento destacado.</p>
+                </a>
+                <a href="{{ url_for('clubs') }}" class="quick-card">
+                    <div class="quick-icon">🏟️</div>
+                    <h4>Clubes</h4>
+                    <p>Equipos, ciudades, estadios y historia.</p>
+                </a>
+                <a href="{{ url_for('tournaments') }}" class="quick-card">
+                    <div class="quick-icon">🏆</div>
+                    <h4>Competiciones</h4>
+                    <p>Campeonatos, torneos y grandes finales.</p>
+                </a>
+                <a href="{{ url_for('partidos') }}" class="quick-card">
+                    <div class="quick-icon">📊</div>
+                    <h4>Resultados</h4>
+                    <p>Consulta la actividad más reciente del calendario.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {# Lista de noticias recientes con sus imágenes y enlaces. #}
+    <section class="panel-block" style="margin-top: 24px;">
+        <div class="panel-header">
+            <h2 class="panel-title">Noticias destacadas</h2>
+            <span class="chip">Actualidad</span>
+        </div>
+
+        <div class="news-grid">
+            {% for noticia in latest_news %}
+            <article class="news-card">
+                <img src="{{ url_for('static', filename=noticia.imagen) if noticia.imagen else url_for('static', filename='IMG/lasele.jfif') }}" alt="{{ noticia.titulo }}">
+                <div>
+                    <h4>{{ noticia.titulo }}</h4>
+                    <p>{{ noticia.resumen }}</p>
+                    <a href="{{ noticia.enlace or '#' }}" target="_blank" rel="noopener noreferrer">Leer más</a>
+                </div>
+            </article>
+            {% else %}
+            <article class="news-card">
+                <img src="{{ url_for('static', filename='IMG/lasele.jfif') }}" alt="Sin noticias">
+                <div>
+                    <h4>Sin noticias por el momento</h4>
+                    <p>Pronto tendremos contenido nuevo y emocionante para la comunidad deportiva.</p>
+                    <a href="{{ url_for('news') }}">Ir a noticias</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const counters = document.querySelectorAll('.stat-value');
+
+        counters.forEach((counter) => {
+            const target = Number(counter.getAttribute('data-target')) || 0;
+            let current = 0;
+            const step = Math.max(1, Math.ceil(target / 40));
+
+            const updateCounter = () => {
+                current += step;
+                if (current >= target) {
+                    current = target;
+                    counter.textContent = current;
+                    return;
+                }
+                counter.textContent = current;
+                requestAnimationFrame(updateCounter);
+            };
+
+            updateCounter();
+        });
+    });
+</script>
+{% endblock %}
+

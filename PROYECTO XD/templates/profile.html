@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}MyDeport | Perfil{% endblock %}
+
+{# Estilos y componentes visuales del perfil personal. #}
+{% block extra_head %}
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='IMG/euro2024.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+        .page-content { padding: 40px 20px; }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .card-box { background: linear-gradient(135deg, rgba(30,30,30,0.95), rgba(20,20,20,0.95)); border: 2px solid #00ff88; border-radius: 20px; padding: 40px; max-width: 700px; margin: auto; animation: fadeInDown 0.6s ease-out; box-shadow: 0 0 30px rgba(0,255,136,0.2), inset 0 1px 0 rgba(255,255,255,0.1); }
+        h1 { color: #00ff88; text-shadow: 0 0 20px rgba(0,255,136,0.5); font-weight: 700; font-size: 2.5em; margin-bottom: 30px; }
+        .profile-info { background: rgba(0,255,136,0.05); border-left: 4px solid #00ff88; padding: 20px; border-radius: 12px; margin-bottom: 25px; animation: slideInUp 0.6s ease-out 0.1s backwards; }
+        .profile-info p { margin: 12px 0; font-size: 1.1em; }
+        .profile-info strong { color: #00ff88; font-weight: 700; text-transform: uppercase; font-size: 0.85em; }
+        .services-section { background: linear-gradient(135deg, rgba(0,255,136,0.05), rgba(0,200,100,0.05)); border: 2px solid #00ff88; border-radius: 16px; padding: 25px; margin-top: 35px; animation: slideInUp 0.6s ease-out 0.2s backwards; }
+        .services-section h5 { color: #00ff88; font-weight: 700; text-transform: uppercase; font-size: 1.3em; margin-bottom: 20px; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+        .service-btn { width: 100%; margin-bottom: 12px; text-align: left; padding: 15px; font-weight: 600; border: 2px solid #00ff88; color: #00ff88; background: transparent; border-radius: 10px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 1.05em; }
+        .service-btn:hover { background: linear-gradient(135deg, #00ff88, #00cc6f); color: #000; transform: translateX(10px); box-shadow: 0 10px 30px rgba(0,255,136,0.4); }
+        .action-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; animation: slideInUp 0.6s ease-out 0.3s backwards; }
+        .action-buttons .btn { flex: 1; min-width: 140px; padding: 12px 20px; font-weight: 600; border-radius: 10px; transition: all 0.3s; text-transform: uppercase; font-size: 0.95em; }
+        .btn-outline-light { border-color: #fff; color: #fff; }
+        .btn-outline-light:hover { background-color: #fff; color: #000; }
+        .btn-warning { background: linear-gradient(135deg, #ffc107, #ff9800); border: none; color: #fff; }
+        .btn-warning:hover { background: linear-gradient(135deg, #ff9800, #f57c00); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255, 152, 0, 0.4); }
+        .btn-outline-success { border-color: #00ff88; color: #00ff88; }
+        .btn-outline-success:hover { background-color: #00ff88; color: #000; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,255,136,0.4); }
+    </style>
+{% endblock %}
+
+{# Información del usuario autenticado y sus acciones de perfil. #}
+{% block content %}
+<main class="page-content">
+<div class="card-box">
+    <h1 class="mb-4">Perfil de usuario</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="profile-info">
+        <p><strong>👤 Nombre:</strong> {{ user.nombre }}</p>
+        <p><strong>✉️ Correo:</strong> {{ user.correo }}</p>
+        <p><strong>👥 Usuario:</strong> {{ user.usuario }}</p>
+        <p><strong>🔐 Rol:</strong> {% if user.is_admin %}<span style="color: #ffc107;">Administrador</span>{% else %}Usuario{% endif %}</p>
+    </div>
+    <div class="services-section">
+        <h5>⚽ Servicios disponibles</h5>
+        <a href="{{ url_for('players') }}" class="btn btn-outline-success service-btn">👥 Ver jugadores</a>
+        <a href="{{ url_for('clubs') }}" class="btn btn-outline-success service-btn">🏟️ Ver clubes</a>
+        <a href="{{ url_for('tournaments') }}" class="btn btn-outline-success service-btn">🏆 Ver torneos</a>
+    </div>
+    <div class="action-buttons">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-light">🏠 Inicio</a>
+        <a href="{{ url_for('edit_profile') }}" class="btn btn-warning">✏️ Editar</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-success">🚪 Salir</a>
+        {% if user.is_admin %}
+        <a href="{{ url_for('admin') }}" class="btn btn-success">⚙️ Admin</a>
+        {% endif %}
+    </div>
+</div>
+</main>
+{% endblock %}
